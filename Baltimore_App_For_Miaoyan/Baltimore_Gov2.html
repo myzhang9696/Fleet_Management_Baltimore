@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+ 	<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+		<title>Baltimore Gov Repairs Department </title>
+
+    <!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="assets/bootstrap/bootstrap4-alpha3.min.css">
+		<!-- Google Font Roboto -->
+		<link rel="stylesheet" href="assets/fonts/font-roboto.css">
+
+		<style>
+			body {
+				background-color: #222222;
+				color: #ffffff;
+				font-family: "Roboto", Helvetica, Arial, sans-serif;
+				font-size: 16px;
+				line-height: 1.5;
+				padding-bottom: 3.5rem;
+				padding-top: 3.5rem;
+			}
+
+			h1, h2, h3, h4, h5, h6 {
+				font-weight: 300;
+			}
+
+			hr {
+				border-top: 1px solid #727273;
+				margin-bottom: 2rem;
+				margin-top: 2rem;
+			}
+
+			#revenue-tag {
+				border-radius: 0px !important;
+				font-size: inherit !important;
+				font-weight: inherit !important;
+			}
+
+			.align-center {
+				text-align: center;
+			}
+
+			.card {
+				background-color: transparent;
+				border: none;
+				margin-bottom: 0px;
+			}
+
+			#sales-doughnut-chart-us, #sales-doughnut-chart-nl, #sales-doughnut-chart-de {
+				height: 280px;
+				margin-top: 1rem;
+				width: 100%;
+			}
+
+			#page-views-spline-area-chart, #orders-spline-area-chart, #revenue-spline-area-chart {
+				height: 100px;
+				width: 100%;
+			}
+
+			#users-doughnut-chart, #users-spline-chart {
+				height: 280px;
+				margin-top: 2rem;
+				width: 100%;
+			}
+
+			#users-countries-bar-chart {
+				height: 360px;
+				margin-top: 2rem;
+				width: 100%;
+			}
+		</style>
+
+		<!-- Scripts -->
+		<script src="assets/jquery/jquery-3.1.0.min.js"></script>
+		<script src="assets/tether/tether.min.js"></script>
+		<script src="assets/bootstrap/bootstrap4-alpha3.min.js"></script>
+		<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+		<script src="assets/jquery.scrollspeed/jquery.scrollspeed.min.js"></script>
+		<script src="assets/jquery.inview/jquery.inview.min.js"></script>
+    <!-- <script src="data_4_21_2 copy.json"></script> -->
+    <script>
+
+
+    $(function () {
+    	var totalRevenue = 45000,
+    			totalUsers = 7687036;
+
+    	// CanvasJS doughnut chart to show annual sales percentage from United States(US)
+    	var salesDoughnutChartUS = new CanvasJS.Chart("sales-doughnut-chart-us", {
+    		animationEnabled: true,
+    		backgroundColor: "transparent",
+    		title: {
+    			fontColor: "#848484",
+    			fontSize: 70,
+    			horizontalAlign: "center",
+    			text: "22%",
+    			verticalAlign: "center"
+    		},
+    		toolTip: {
+    			backgroundColor: "#ffffff",
+    			borderThickness: 0,
+    			cornerRadius: 0,
+    			fontColor: "#424242"
+    		},
+    		data: [
+    			{
+    				explodeOnClick: false,
+    				innerRadius: "96%",
+    				radius: "90%",
+    				startAngle: 270,
+    				type: "doughnut",
+    				dataPoints: [
+    					{ y: 22, color: "#00c700", toolTipContent: "There is a 22% Chance that the Next Trip is a comeback Trip" },
+    					{ y: 78, color: "#424242", toolTipContent: null }
+    				]
+    			}
+    		]
+    	});
+
+    	// CanvasJS doughnut chart to show annual sales percentage from Netherlands(NL)
+    	var salesDoughnutChartNL = new CanvasJS.Chart("sales-doughnut-chart-nl", {
+    		animationEnabled: true,
+    		backgroundColor: "transparent",
+    		title: {
+    			fontColor: "#848484",
+    			fontSize: 50,
+    			horizontalAlign: "center",
+    			text: "REG",
+    			verticalAlign: "center"
+    		},
+    		toolTip: {
+    			backgroundColor: "#ffffff",
+    			borderThickness: 0,
+    			cornerRadius: 0,
+    			fontColor: "#424242"
+    		},
+    		data: [
+    			{
+    				explodeOnClick: false,
+    				innerRadius: "56%",
+    				radius: "90%",
+    				startAngle: 270,
+    				type: "doughnut",
+    				dataPoints: [
+    					{ y: 100, color: "#00c700", toolTipContent: "This Trip is a Regular Trip <span>" },
+    					{ y: 0, color: "#424242", toolTipContent: null }
+    				]
+    			}
+    		]
+    	});
+
+    	// CanvasJS doughnut chart to show annual sales percentage from Germany(DE)
+    	var salesDoughnutChartDE = new CanvasJS.Chart("sales-doughnut-chart-de", {
+    		animationEnabled: true,
+    		backgroundColor: "transparent",
+    		title: {
+    			fontColor: "#848484",
+    			fontSize: 40,
+    			horizontalAlign: "center",
+    			text: "1 month",
+    			verticalAlign: "center"
+    		},
+    		toolTip: {
+    			backgroundColor: "#ffffff",
+    			borderThickness: 0,
+    			cornerRadius: 0,
+    			fontColor: "#424242"
+    		},
+    		data: [
+    			{
+    				explodeOnClick: false,
+    				innerRadius: "96%",
+    				radius: "90%",
+    				startAngle: 270,
+    				type: "doughnut",
+    				dataPoints: [
+    					{ y: 8.3, color: "#00c700", toolTipContent: " The EPCycle or Warranty for this particular Vehicle & Part is 1 month<span>" },
+    					{ y: 91.7, color: "#424242", toolTipContent: null }
+    				]
+    			}
+    		]
+    	});
+
+    	// CanvasJS spline area chart to show pageviews from Jan 2015 - Dec 2015
+    	var pageViewsSplineAreaChart = new CanvasJS.Chart("page-views-spline-area-chart", {
+    		animationEnabled: true,
+    		backgroundColor: "transparent",
+    		axisX: {
+    			gridThickness: 0,
+    			lineThickness: 0,
+    			maximum: new Date("1 Dec 2015"),
+    			minimum: new Date("1 Jan 2015"),
+    			tickLength: 0,
+    			valueFormatString: " "
+    		},
+    		axisY: {
+    			gridThickness: 0,
+    			lineThickness: 0,
+    			tickLength: 0,
+    			valueFormatString: " "
+    		},
+    		toolTip: {
+    			backgroundColor: "#ffffff",
+    			borderThickness: 0,
+    			cornerRadius: 0,
+    			fontColor: "#424242"
+    		},
+    		data: [
+    			{
+    				color: "#424242",
+    				fillOpacity: 1,
+    				lineColor: "#ffffff",
+    				lineThickness: 3,
+    				markerSize: 0,
+    				type: "splineArea",
+    				dataPoints: [
+    					{ x: new Date("1 Jan 2015"), y: 1991 },
+    					{ x: new Date("1 Feb 2015"), y: 8910 },
+    					{ x: new Date("1 Mar 2015"), y: 3154 },
+    					{ x: new Date("1 Apr 2015"), y: 1375 },
+    					{ x: new Date("1 May 2015"), y: 2584 },
+    					{ x: new Date("1 Jun 2015"), y: 3178 },
+    					{ x: new Date("1 Jul 2015"), y: 3640 },
+    					{ x: new Date("1 Aug 2015"), y: 2681 },
+    					{ x: new Date("1 Sep 2015"), y: 3921 },
+    					{ x: new Date("1 Oct 2015"), y: 3719 },
+    					{ x: new Date("1 Nov 2015"), y: 3971 },
+    					{ x: new Date("1 Dec 2015"), y: 2153 }
+    				]
+    			}
+    		]
+    	});
+
+    	// CanvasJS spline area chart to show orders from Jan 2015 - Dec 2015
+    	var ordersSplineAreaChart = new CanvasJS.Chart("orders-spline-area-chart", {
+    		animationEnabled: true,
+    		backgroundColor: "transparent",
+    		axisX: {
+    			gridThickness: 0,
+    			lineThickness: 0,
+    			maximum: new Date("1 Dec 2015"),
+    			minimum: new Date("1 Jan 2015"),
+    			tickLength: 0,
+    			valueFormatString: " "
+    		},
+    		axisY: {
+    			gridThickness: 0,
+    			lineThickness: 0,
+    			tickLength: 0,
+    			valueFormatString: " "
+    		},
+    		toolTip: {
+    			backgroundColor: "#ffffff",
+    			borderThickness: 0,
+    			cornerRadius: 0,
+    			fontColor: "#424242"
+    		},
+    		data: [
+    			{
+    				color: "#424242",
+    				fillOpacity: 1,
+    				lineColor: "#ffffff",
+    				lineThickness: 3,
+    				markerSize: 0,
+    				type: "splineArea",
+    				dataPoints: [
+    					{ x: new Date("1 Jan 2015"), y: 7376 },
+    					{ x: new Date("1 Feb 2015"), y: 1431 },
+    					{ x: new Date("1 Mar 2015"), y: 5724 },
+    					{ x: new Date("1 Apr 2015"), y: 2238 },
+    					{ x: new Date("1 May 2015"), y: 2076 },
+    					{ x: new Date("1 Jun 2015"), y: 2529 },
+    					{ x: new Date("1 Jul 2015"), y: 2960 },
+    					{ x: new Date("1 Aug 2015"), y: 2317 },
+    					{ x: new Date("1 Sep 2015"), y: 1883 },
+    					{ x: new Date("1 Oct 2015"), y: 3034 },
+    					{ x: new Date("1 Nov 2015"), y: 1768 },
+    					{ x: new Date("1 Dec 2015"), y: 1215 }
+    				]
+    			}
+    		]
+    	});
+
+    	// CanvasJS spline area chart to show revenue from Jan 2015 - Dec 2015
+    	var revenueSplineAreaChart = new CanvasJS.Chart("revenue-spline-area-chart", {
+    		animationEnabled: true,
+    		backgroundColor: "transparent",
+    		axisX: {
+    			gridThickness: 0,
+    			lineThickness: 0,
+    			maximum: new Date("1 Dec 2015"),
+    			minimum: new Date("1 Jan 2015"),
+    			tickLength: 0,
+    			valueFormatString: " "
+    		},
+    		axisY: {
+    			gridThickness: 0,
+    			lineThickness: 0,
+    			tickLength: 0,
+    			valueFormatString: " "
+    		},
+    		toolTip: {
+    			backgroundColor: "#ffffff",
+    			borderThickness: 0,
+    			cornerRadius: 0,
+    			fontColor: "#424242"
+    		},
+    		data: [
+    			{
+    				color: "#424242",
+    				fillOpacity: 1,
+    				lineColor: "#ffffff",
+    				lineThickness: 3,
+    				markerSize: 0,
+    				type: "splineArea",
+    				yValueFormatString: "$###,###.##",
+    				dataPoints: [
+    					{ x: new Date("1 Jan 2015"), y: 8680 },
+    					{ x: new Date("1 Feb 2015"), y: 1071 },
+    					{ x: new Date("1 Mar 2015"), y: 1286 },
+    					{ x: new Date("1 Apr 2015"), y: 1100 },
+    					{ x: new Date("1 May 2015"), y: 10330 },
+    					{ x: new Date("1 Jun 2015"), y: 1017 },
+    					{ x: new Date("1 Jul 2015"), y: 18000 },
+    					{ x: new Date("1 Aug 2015"), y: 11650 },
+    					{ x: new Date("1 Sep 2015"), y: 1594 },
+    					{ x: new Date("1 Oct 2015"), y: 1501 },
+    					{ x: new Date("1 Nov 2015"), y: 15880 },
+    					{ x: new Date("1 Dec 2015"), y: 8600 }
+    				]
+    			}
+    		]
+    	});
+
+    	// CanvasJS doughnut chart to show annual users - new and returning
+    	var usersDoughnutChart = new CanvasJS.Chart("users-doughnut-chart", {
+    		animationEnabled: true,
+    		backgroundColor: "transparent",
+    		toolTip: {
+    			backgroundColor: "#000000",
+    			borderThickness: 2,
+    			cornerRadius: 0,
+    			fontColor: "#ffffff",
+    			contentFormatter: function (e) {
+    				return e.entries[0].dataPoint.name + ": " + CanvasJS.formatNumber(e.entries[0].dataPoint.y, '###,###') + " - "  + "%"; // calcuting and showing percentage of users inside tooltip
+    			}
+    		},
+    		data: [
+    			{
+    				innerRadius: "82%",
+    				radius: "100%",
+    				showInLegend: false,
+    				startAngle: 180,
+    				type: "doughnut",
+    				dataPoints: [
+    					{ y: 30, name: "Comeback", color: "#c70000" },
+    					{ y: 70, name: "Regular", color: "#00c700", exploded: true }
+    				]
+    			}
+    		]
+    	});
+
+    	// CanvasJS spline chart to show users - new and returning from Jan 2015 - Dec 2015
+    	var usersSplineChart = new CanvasJS.Chart("users-spline-chart", {
+    		animationEnabled: true,
+    		backgroundColor: "transparent",
+    		axisX: {
+    			gridThickness: 0,
+    			labelFontColor: "#bbbbbb",
+    			lineColor: "#bbbbbb"
+    		},
+    		axisY: {
+    			gridThickness: 0,
+    			labelFontColor: "#bbbbbb",
+    			lineColor: "#bbbbbb"
+    		},
+    		legend: {
+    			dockInsidePlotArea: true,
+    			fontColor: "#ffffff",
+    			fontSize: 16,
+    			horizontalAlign: "right",
+    			verticalAlign: "top"
+    		},
+    		toolTip: {
+    			backgroundColor: "#000000",
+    			borderThickness: 2,
+    			cornerRadius: 0,
+    			fontColor: "#ffffff",
+    			shared: true
+    		},
+    		data: [
+    			{
+    				color: "#c70000",
+    				legendMarkerType: "square",
+    				legendText: "Comeback",
+    				name: "Comeback",
+    				showInLegend: true,
+    				type: "spline",
+    				dataPoints: [
+    					{ x: new Date("1 Jan 2015"), y: 72579 },
+    					{ x: new Date("1 Feb 2015"), y: 40183 },
+    					{ x: new Date("1 Mar 2015"), y: 48232 },
+    					{ x: new Date("1 Apr 2015"), y: 33206 },
+    					{ x: new Date("1 May 2015"), y: 68768 },
+    					{ x: new Date("1 Jun 2015"), y: 47679 },
+    					{ x: new Date("1 Jul 2015"), y: 54675 },
+    					{ x: new Date("1 Aug 2015"), y: 73718 },
+    					{ x: new Date("1 Sep 2015"), y: 59781 },
+    					{ x: new Date("1 Oct 2015"), y: 56313 },
+    					{ x: new Date("1 Nov 2015"), y: 89565 },
+    					{ x: new Date("1 Dec 2015"), y: 61823 }
+    				]
+    			},
+    			{
+    				color: "#00c700",
+    				legendMarkerType: "square",
+    				legendText: "Regular Trip",
+    				name: "Regular Trip",
+    				showInLegend: true,
+    				type: "spline",
+    				dataPoints: [
+    					{ x: new Date("1 Jan 2015"), y: 58599 },
+    					{ x: new Date("1 Feb 2015"), y: 43945 },
+    					{ x: new Date("1 Mar 2015"), y: 16077 },
+    					{ x: new Date("1 Apr 2015"), y: 21068 },
+    					{ x: new Date("1 May 2015"), y: 12922 },
+    					{ x: new Date("1 Jun 2015"), y: 25893 },
+    					{ x: new Date("1 Jul 2015"), y: 38225 },
+    					{ x: new Date("1 Aug 2015"), y: 34572 },
+    					{ x: new Date("1 Sep 2015"), y: 19927 },
+    					{ x: new Date("1 Oct 2015"), y: 38771 },
+    					{ x: new Date("1 Nov 2015"), y: 49855 },
+    					{ x: new Date("1 Dec 2015"), y: 40607 }
+    				]
+    			}
+    		]
+    	});
+
+    	// CanvasJS bar chart to show country wise annual users percentage
+    	var usersCountriesBarChart = new CanvasJS.Chart("users-countries-bar-chart", {
+    		animationEnabled: true,
+    		backgroundColor: "transparent",
+    		axisX: {
+    			labelFontColor: "#f7f6f6",
+    			labelFontSize: 18,
+    			lineThickness: 0,
+    			tickThickness: 0
+    		},
+    		axisY: {
+    			gridThickness: 0,
+    			lineThickness: 0,
+    			tickThickness: 0,
+    			valueFormatString: " "
+
+    		},
+    		toolTip: {
+    			backgroundColor: "#ffffff",
+    			borderThickness: 0,
+    			cornerRadius: 0,
+    			fontColor: "#424242",
+    			contentFormatter: function (e) {
+    				return e.entries[0].dataPoint.label + ": " +  CanvasJS.formatNumber(Math.round(e.entries[0].dataPoint.y / 100 * 500), '###,###'); // calculating and showing country wise number of users inside tooltip
+    			}
+    		},
+    		data: [
+    			{
+    				color: "#424242",
+    				indexLabelFontColor: "#f7f6f6",
+    				indexLabelFontFamily: "calibri",
+    				indexLabelFontSize: 18,
+    				indexLabelPlacement: "outside",
+    				type: "bar",
+    				dataPoints: [
+    					{ y: 14,  indexLabel: "14%",  label: "Others" },
+    					{ y: 4,  indexLabel: "4%",  label: "Glass-Component" },
+    					{ y: 5,  indexLabel: "5%",  label: "Packing System" },
+    					{ y: 18, indexLabel: "18%", label: "Lights" },
+    					{ y: 1,  indexLabel: "1%",  label: "Quick Svc" },
+    					{ y: 22, indexLabel: "22%", label: "Gauge Instr Pnl" },
+    					{ y: 12, indexLabel: "12%", label: "Tire Service" },
+    					{ y: 24, indexLabel: "24%", label: "Brake Maintenance System" }
+    				]
+    			}
+    		]
+    	});
+
+    	jQuery.scrollSpeed(100, 400); // for smooth mouse wheel scrolling
+
+    	// jQuery.inview plugin
+    	$('.inview').one('inview', function (e, isInView) {
+    		if (isInView) {
+    			switch (this.id) {
+    				case "sales-doughnut-chart-us": salesDoughnutChartUS.render();
+    					break;
+    				case "sales-doughnut-chart-nl": salesDoughnutChartNL.render();
+    					break;
+    				case "sales-doughnut-chart-de": salesDoughnutChartDE.render();
+    					break;
+    				case "page-views-spline-area-chart": pageViewsSplineAreaChart.render();
+    					break;
+    				case "orders-spline-area-chart": ordersSplineAreaChart.render();
+    					break;
+    				case "revenue-spline-area-chart": revenueSplineAreaChart.render();
+    					break;
+    				case "users-doughnut-chart": usersDoughnutChart.render();
+    					break;
+    				case "users-spline-chart": usersSplineChart.render();
+    					break;
+    				case "users-countries-bar-chart": usersCountriesBarChart.render();
+    					break;
+    			}
+    		}
+    	});
+
+    });
+
+    </script>
+
+  </head>
+  <body>
+		<div class="container">
+			<h1>Baltimore Gov Repairs Department - 2015</h1>
+			<h5 class="m-t-1">Savings This year: <span class="tag tag-success" id="revenue-tag">$1,200,657</span></h5>
+			<hr class="m-t-2">
+      <a class="btn btn-info" href="Baltimore_Gov.html" role="button">Previous</a><br>
+<p>
+			<h3>Probability of Comeback for<mark background-color= 'yellow'>EhKey :099476 </mark>of Department <mark background-color= 'yellow'>Police </mark></h3>
+
+  <!-- <img src="/Users/akshaynagar/Desktop/Baltimore_App/assets/2009chev.jpg" height = 200> -->
+<center>
+
+
+			<!-- sales doughnut charts -->
+			<div class="row">
+				<div class="col-md-4">
+					<div class="inview" id="sales-doughnut-chart-us"></div>
+					<h3 class="align-center">Chances of Comeback</h3>
+				</div>
+
+				<div class="col-md-4">
+					<div class="inview" id="sales-doughnut-chart-nl"></div>
+					<h3 class="align-center">This is a Regular Trip</h3>
+				</div>
+
+				<div class="col-md-4">
+					<div class="inview" id="sales-doughnut-chart-de"></div>
+					<h3 class="align-center">Warranty Period</h3>
+				</div>
+			</div>
+    </center>
+			<!-- row sales doughnt charts -->
+
+			<hr>
+
+			<!-- stats spline area charts -->
+			<div class="row">
+				<div class="col-md-4">
+					<div class="card card-block">
+						<h5 class="card-title">Costing History</h5>
+						<h2>25,300</h2>
+						<div class="inview" id="page-views-spline-area-chart"></div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="card card-block">
+						<h5 class="card-title">Past 1 month Cost</h5>
+						<h2 >$20,000</h2>
+						<div class="inview" id="orders-spline-area-chart"></div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="card card-block">
+						<h5 class="card-title">Past 1 month Cost (Dept. Avg)</h5>
+						<h2>$44,026</h2>
+						<div class="inview" id="revenue-spline-area-chart"></div>
+					</div>
+				</div>
+			</div>
+			<!-- row stats spline area charts -->
+
+			<hr>
+
+			<h3>Comeback vs Regular</h3>
+
+			<!-- users doughnut and spline chart -->
+			<div class="row">
+				<div class="col-lg-3 col-md-4">
+					<div class="inview" id="users-doughnut-chart"></div>
+				</div>
+
+				<div class="col-lg-9 col-md-8">
+					<div class="inview" id="users-spline-chart"></div>
+				</div>
+			</div>
+			<!-- row users doughnut and spline chart -->
+
+			<hr>
+
+			<h3>Percentage of Repairs by Parts</h3>
+
+			<!-- users countries bar chart -->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="inview" id="users-countries-bar-chart"></div>
+				</div>
+			</div>
+			<!-- row users countries bar chart -->
+
+		</div> <!-- container -->
+
+	</body>
+</html>
