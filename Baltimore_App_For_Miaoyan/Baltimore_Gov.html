@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
  	<head>
     <meta charset="utf-8">
@@ -71,6 +72,59 @@
 				margin-top: 2rem;
 				width: 100%;
 			}
+
+      .autocomplete {
+        /*the container must be positioned relative:*/
+        position: relative;
+        display: inline-block;
+      }
+      input {
+        border: 1px solid transparent;
+        background-color: #f1f1f1;
+        padding: 10px;
+        font-size: 16px;
+      }
+      input[type=text] {
+        background-color: #f1f1f1;
+        width: 100%;
+      }
+      input[type=submit] {
+        background-color: DodgerBlue;
+        color: #fff;
+      }
+      .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 0;
+        right: 0;
+      }
+      .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #333333;
+        border-bottom: 1px solid #d4d4d4;
+      }
+      .autocomplete-items div:hover {
+        /*when hovering an item:*/
+        background-color: #555555;
+      }
+      .autocomplete-active {
+        /*when navigating through the items using the arrow keys:*/
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+      }
+
+
+
+
+
+
+
 		</style>
 
 		<!-- Scripts -->
@@ -81,23 +135,33 @@
 		<script src="assets/jquery.scrollspeed/jquery.scrollspeed.min.js"></script>
 		<script src="assets/jquery.inview/jquery.inview.min.js"></script>
     <script src="js/main.js"></script>
-    <script src="data_4_21_2 copy.js"></script>
+    <script src="data_5_7.js"></script>
+    <script src="js/underscore.js"></script>
 
 
   </head>
   <body>
 		<div class="container">
-			<h1>Baltimore Gov Repairs Department - 2015</h1>
+			<h1><b>Baltimore Fleet Management System</b></h1>
+      <h5 id="date"></h5>
 			<h5 class="m-t-1">Savings This year: <span class="tag tag-success" id="revenue-tag">$1,200,657</span></h5>
 			<hr class="m-t-2">
       <a class="btn btn-info" href="Baltimore_Gov2.html" role="button">Next</a><br>
       <p>
-			<h3>Please Enter the Vehicle ID: <input id="id_key" type="text" value="e.g. 143065"><button id="calculate">Search</button></h3>
-      <h2 id="vehicle_id">Vehicle ID: 030034</h2>
-
+			<h3><b>Please Enter the Vehicle ID: </b></h3>
+      <form autocomplete="off" action="/action_page.php">
+        <div class="autocomplete" style="width:300px;">
+          <input id="myInput" type="text" name="myCountry" placeholder="Vehicle ID">
+        </div>
+        <input type="button" value="Search" id="id_search">
+      </form>
+      <p>
+      <h4 id="vehicle_id">Vehicle ID: 030034</h4>
+      <h4 id="vehicle_dpt">Department: FIRE DEPARTMENT</h4>
+      <h4 id="vehicle_make">Make: PIERCE</h4>
+      <h4 id="vehicle_model">Model: PUMPER</h4>
   <!-- <img src="/Users/akshaynagar/Desktop/Baltimore_App/assets/F12.jpg" height = 200> -->
 <center>
-
 
 			<!-- sales doughnut charts -->
 			<div class="row">
@@ -125,24 +189,24 @@
 			<div class="row">
 				<div class="col-md-4">
 					<div class="card card-block">
-						<h5 class="card-title">Costing History</h5>
-						<h2>79,600</h2>
+						<h5 class="card-title" >Total Cost Last Year this Vehicle</h5>
+						<h2 id ="number_1">$79600</h2>
 						<div class="inview" id="page-views-spline-area-chart"></div>
 					</div>
 				</div>
 
 				<div class="col-md-4">
 					<div class="card card-block">
-						<h5 class="card-title">Past 1 month Cost</h5>
-						<h2 >$62,012</h2>
+						<h5 class="card-title">Total Cost Last Month this Vehicle</h5>
+						<h2 id ="number_2">$62012</h2>
 						<div class="inview" id="orders-spline-area-chart"></div>
 					</div>
 				</div>
 
 				<div class="col-md-4">
 					<div class="card card-block">
-						<h5 class="card-title">Past 1 month Cost (Dept. Avg)</h5>
-						<h2>$42,066</h2>
+						<h5 class="card-title">Department Avg Cost Last 12 mo.</h5>
+						<h2 id ="number_3">$42066</h2>
 						<div class="inview" id="revenue-spline-area-chart"></div>
 					</div>
 				</div>

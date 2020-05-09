@@ -1,8 +1,6 @@
 
 $(function () {
-
   document.getElementById("date").innerHTML = Date();
-
   // List of date each past month
   var date_month = []
   for (i = 0; i < 13; i++) {
@@ -120,16 +118,18 @@ $(function () {
   autocomplete(document.getElementById("myInput"), uniqueIDs);
 
 
-// All Plot Graphs
-// set some global var
-  var risk;
-  var risk_text;
+  var risk = 0.1878;
+  var risk_text = Math.round(risk * 1000) / 10 + "%";
   var cut_off = 0.28;
-  var warranty;
+  var warranty = 6;
   var id_n = 0;
-// plots
-  function plot_all(x) {
-    var id = x;
+  var totalRevenue = 45000,
+      totalUsers = 7687036;
+
+// Reset all plot after clicking the search button
+  $("#id_search").click(function(e) {
+    var id = $('#myInput').val();
+    var id_n;
     var flag = 0;
     for(var i = 0; i<data_1.length; i++){
       if(data_1[i].EhKey == id){
@@ -137,14 +137,12 @@ $(function () {
         id_n = i;
         $("#vehicle_id").text(`Vehicle ID: ${id}`);
         $("#vehicle_dpt").text(`Department: ${data_1[i].EqcDesc}`);
-        $("#vehicle_make").text(`Make: ${data_1[i].Make}`);
-        $("#vehicle_model").text(`Model: ${data_1[i].Model}`);
+        $("#vehicle_make").text(`MAKE: ${data_1[i].Make}`);
+        $("#vehicle_model").text(`Vehicle ID: ${data_1[i].Model}`);
         flag =1;
       }
     }
-    if(flag==0){
-      alert("This ID do not exist");
-    }
+    if(flag==0){alert("This ID do not exist");}
     risk_text = Math.round(risk * 1000) / 10 + "%";
     if(risk<cut_off){
       var salesDoughnutChartUS = new CanvasJS.Chart("sales-doughnut-chart-us", {
@@ -201,7 +199,7 @@ $(function () {
             startAngle: 270,
             type: "doughnut",
             dataPoints: [
-              { y: 100, color: "#00c700", toolTipContent: "We predict the next trip to be a Regular Trip<span>" },
+              { y: 100, color: "#00c700", toolTipContent: "We predict next trip to be a Regular Trip <span>" },
               { y: 0, color: "#424242", toolTipContent: null }
             ]
           }
@@ -295,7 +293,7 @@ $(function () {
             startAngle: 270,
             type: "doughnut",
             dataPoints: [
-              { y: 100, color: "#c70000", toolTipContent: "We predict the next trip to be a Comeback Trip<span>" },
+              { y: 100, color: "#c70000", toolTipContent: "We predict next trip to be a Comeback Trip <span>" },
               { y: 0, color: "#424242", toolTipContent: null }
             ]
           }
@@ -654,15 +652,522 @@ $(function () {
       ]
     });
     usersCountriesBarChart.render();
+
+
+
+  });
+
+
+
+
+  // The orininal page without typing in the information
+
+  // CanvasJS doughnut chart to show annual sales percentage from United States(US)
+
+  if(risk<cut_off){
+    var salesDoughnutChartUS = new CanvasJS.Chart("sales-doughnut-chart-us", {
+      animationEnabled: true,
+      backgroundColor: "transparent",
+      title: {
+        fontColor: "#848484",
+        fontSize: 70,
+        horizontalAlign: "center",
+        text: risk_text,
+        verticalAlign: "center"
+      },
+      toolTip: {
+        backgroundColor: "#ffffff",
+        borderThickness: 0,
+        cornerRadius: 0,
+        fontColor: "#424242"
+      },
+      data: [
+        {
+          explodeOnClick: false,
+          innerRadius: "96%",
+          radius: "90%",
+          startAngle: 270,
+          type: "doughnut",
+          dataPoints: [
+            { y: risk*100, color: "#00c700", toolTipContent: `There is a ${risk_text} Chance that the Next Trip is a comeback Trip` },
+            { y: (1-risk)*100, color: "#424242", toolTipContent: null }
+          ]
+        }
+      ]
+    });
+    var salesDoughnutChartNL = new CanvasJS.Chart("sales-doughnut-chart-nl", {
+      animationEnabled: true,
+      backgroundColor: "transparent",
+      title: {
+        fontColor: "#848484",
+        fontSize: 50,
+        horizontalAlign: "center",
+        text: "REG",
+        verticalAlign: "center"
+      },
+      toolTip: {
+        backgroundColor: "#ffffff",
+        borderThickness: 0,
+        cornerRadius: 0,
+        fontColor: "#424242"
+      },
+      data: [
+        {
+          explodeOnClick: false,
+          innerRadius: "56%",
+          radius: "90%",
+          startAngle: 270,
+          type: "doughnut",
+          dataPoints: [
+            { y: 100, color: "#00c700", toolTipContent: "This Trip is a regular Trip <span>" },
+            { y: 0, color: "#424242", toolTipContent: null }
+          ]
+        }
+      ]
+    });
+    var salesDoughnutChartDE = new CanvasJS.Chart("sales-doughnut-chart-de", {
+      animationEnabled: true,
+      backgroundColor: "transparent",
+      title: {
+        fontColor: "#848484",
+        fontSize: 40,
+        horizontalAlign: "center",
+        text: "6 MONTHS",
+        verticalAlign: "center"
+      },
+      toolTip: {
+        backgroundColor: "#ffffff",
+        borderThickness: 0,
+        cornerRadius: 0,
+        fontColor: "#424242"
+      },
+      data: [
+        {
+          explodeOnClick: false,
+          innerRadius: "96%",
+          radius: "90%",
+          startAngle: 270,
+          type: "doughnut",
+          dataPoints: [
+            { y: 100, color: "#00c700", toolTipContent: `The EPCycle or Warranty for this particular Vehicle & Part is ${warranty} MONTHS<span>` },
+            { y: 0, color: "#424242", toolTipContent: null }
+          ]
+        }
+      ]
+    });
+  }else{
+    var salesDoughnutChartUS = new CanvasJS.Chart("sales-doughnut-chart-us", {
+      animationEnabled: true,
+      backgroundColor: "transparent",
+      title: {
+        fontColor: "#848484",
+        fontSize: 70,
+        horizontalAlign: "center",
+        text: risk_text,
+        verticalAlign: "center"
+      },
+      toolTip: {
+        backgroundColor: "#ffffff",
+        borderThickness: 0,
+        cornerRadius: 0,
+        fontColor: "#424242"
+      },
+      data: [
+        {
+          explodeOnClick: false,
+          innerRadius: "96%",
+          radius: "90%",
+          startAngle: 270,
+          type: "doughnut",
+          dataPoints: [
+            { y: risk*100, color: "#c70000", toolTipContent: `There is a ${risk_text} Chance that the Next Trip is a comeback Trip` },
+            { y: (1-risk)*100, color: "#424242", toolTipContent: null }
+          ]
+        }
+      ]
+    });
+    var salesDoughnutChartNL = new CanvasJS.Chart("sales-doughnut-chart-nl", {
+      animationEnabled: true,
+      backgroundColor: "transparent",
+      title: {
+        fontColor: "#848484",
+        fontSize: 50,
+        horizontalAlign: "center",
+        text: "CB",
+        verticalAlign: "center"
+      },
+      toolTip: {
+        backgroundColor: "#ffffff",
+        borderThickness: 0,
+        cornerRadius: 0,
+        fontColor: "#424242"
+      },
+      data: [
+        {
+          explodeOnClick: false,
+          innerRadius: "56%",
+          radius: "90%",
+          startAngle: 270,
+          type: "doughnut",
+          dataPoints: [
+            { y: 100, color: "#c70000", toolTipContent: "This Trip is a comeback Trip <span>" },
+            { y: 0, color: "#424242", toolTipContent: null }
+          ]
+        }
+      ]
+    });
+    var salesDoughnutChartDE = new CanvasJS.Chart("sales-doughnut-chart-de", {
+      animationEnabled: true,
+      backgroundColor: "transparent",
+      title: {
+        fontColor: "#848484",
+        fontSize: 40,
+        horizontalAlign: "center",
+        text: "6 MONTHS",
+        verticalAlign: "center"
+      },
+      toolTip: {
+        backgroundColor: "#ffffff",
+        borderThickness: 0,
+        cornerRadius: 0,
+        fontColor: "#424242"
+      },
+      data: [
+        {
+          explodeOnClick: false,
+          innerRadius: "96%",
+          radius: "90%",
+          startAngle: 270,
+          type: "doughnut",
+          dataPoints: [
+            { y: 100, color: "#c70000", toolTipContent: `The EPCycle or Warranty for this particular Vehicle & Part is ${warranty} MONTHS<span>` },
+            { y: 0, color: "#424242", toolTipContent: null }
+          ]
+        }
+      ]
+    });
   };
 
 
-// Main()
 
-// plot the original one
-  plot_all("000036");
-// Reset all plot after clicking the search button
-  $("#id_search").click(function(e) {
-    plot_all($('#myInput').val());
+  // Get date of past 12 month
+
+
+  // CanvasJS spline area chart to show pageviews from Jan 2015 - Dec 2015
+  var pageViewsSplineAreaChart = new CanvasJS.Chart("page-views-spline-area-chart", {
+    animationEnabled: true,
+    backgroundColor: "transparent",
+    axisX: {
+      gridThickness: 0,
+      lineThickness: 0,
+      maximum: date_month[11],
+      minimum: date_month[0],
+      tickLength: 0,
+      valueFormatString: " "
+    },
+    axisY: {
+      gridThickness: 0,
+      lineThickness: 0,
+      tickLength: 0,
+      valueFormatString: " "
+    },
+    toolTip: {
+      backgroundColor: "#ffffff",
+      borderThickness: 0,
+      cornerRadius: 0,
+      fontColor: "#424242"
+    },
+    data: [
+      {
+        color: "#424242",
+        fillOpacity: 1,
+        lineColor: "#ffffff",
+        lineThickness: 3,
+        markerSize: 0,
+        type: "splineArea",
+        dataPoints: [
+          { x: date_month[0], y: 2171991 },
+          { x: date_month[1], y: 2678910 },
+          { x: date_month[2], y: 3215487 },
+          { x: date_month[3], y: 2213754 },
+          { x: date_month[4], y: 2584561 },
+          { x: date_month[5], y: 3178647 },
+          { x: date_month[6], y: 3645041 },
+          { x: date_month[7], y: 2914568 },
+          { x: date_month[8], y: 3985421 },
+          { x: date_month[9], y: 3754219 },
+          { x: date_month[10], y: 3971047 },
+          { x: date_month[11], y: 4121538 }
+        ]
+      }
+    ]
   });
+
+  // CanvasJS spline area chart to show orders from Jan 2015 - Dec 2015
+  var ordersSplineAreaChart = new CanvasJS.Chart("orders-spline-area-chart", {
+    animationEnabled: true,
+    backgroundColor: "transparent",
+    axisX: {
+      gridThickness: 0,
+      lineThickness: 0,
+      maximum: date_week[4],
+      minimum: date_week[0],
+      tickLength: 0,
+      valueFormatString: " "
+    },
+    axisY: {
+      gridThickness: 0,
+      lineThickness: 0,
+      tickLength: 0,
+      valueFormatString: " "
+    },
+    toolTip: {
+      backgroundColor: "#ffffff",
+      borderThickness: 0,
+      cornerRadius: 0,
+      fontColor: "#424242"
+    },
+    data: [
+      {
+        color: "#424242",
+        fillOpacity: 1,
+        lineColor: "#ffffff",
+        lineThickness: 3,
+        markerSize: 0,
+        type: "splineArea",
+        dataPoints: [
+          { x: date_week[0], y: 17376 },
+          { x: date_week[1], y: 21431 },
+          { x: date_week[2], y: 25724 },
+          { x: date_week[3], y: 22138 },
+          { x: date_week[4], y: 20676 }
+        ]
+      }
+    ]
+  });
+
+  // CanvasJS spline area chart to show revenue from Jan 2015 - Dec 2015
+  var revenueSplineAreaChart = new CanvasJS.Chart("revenue-spline-area-chart", {
+    animationEnabled: true,
+    backgroundColor: "transparent",
+    axisX: {
+      gridThickness: 0,
+      lineThickness: 0,
+      maximum: date_week[4],
+      minimum: date_week[0],
+      tickLength: 0,
+      valueFormatString: " "
+    },
+    axisY: {
+      gridThickness: 0,
+      lineThickness: 0,
+      tickLength: 0,
+      valueFormatString: " "
+    },
+    toolTip: {
+      backgroundColor: "#ffffff",
+      borderThickness: 0,
+      cornerRadius: 0,
+      fontColor: "#424242"
+    },
+    data: [
+      {
+        color: "#424242",
+        fillOpacity: 1,
+        lineColor: "#ffffff",
+        lineThickness: 3,
+        markerSize: 0,
+        type: "splineArea",
+        yValueFormatString: "$###,###.##",
+        dataPoints: [
+          { x: date_week[0], y: 1071550 },
+          { x: date_week[1], y: 1286200 },
+          { x: date_week[2], y: 1106900 },
+          { x: date_week[3], y: 1017160 },
+          { x: date_week[4], y: 1458000 }
+        ]
+      }
+    ]
+  });
+
+  // CanvasJS doughnut chart to show annual users - new and returning
+  var usersDoughnutChart = new CanvasJS.Chart("users-doughnut-chart", {
+    animationEnabled: true,
+    backgroundColor: "transparent",
+    toolTip: {
+      backgroundColor: "#000000",
+      borderThickness: 2,
+      cornerRadius: 0,
+      fontColor: "#ffffff",
+      contentFormatter: function (e) {
+        return e.entries[0].dataPoint.name + ": " + CanvasJS.formatNumber(e.entries[0].dataPoint.y, '###,###') + " - "  + "%"; // calcuting and showing percentage of users inside tooltip
+      }
+    },
+    data: [
+      {
+        innerRadius: "82%",
+        radius: "100%",
+        showInLegend: false,
+        startAngle: 180,
+        type: "doughnut",
+        dataPoints: [
+          { y: 40, name: "Regular", color: "#00c700", exploded: true },
+          { y: 60, name: "Comeback", color: "#c70000" }
+        ]
+      }
+    ]
+  });
+
+
+  var usersSplineChart = new CanvasJS.Chart("users-spline-chart", {
+    animationEnabled: true,
+    backgroundColor: "transparent",
+    axisX: {
+      gridThickness: 0,
+      labelFontColor: "#bbbbbb",
+      lineColor: "#bbbbbb"
+    },
+    axisY: {
+      gridThickness: 0,
+      labelFontColor: "#bbbbbb",
+      lineColor: "#bbbbbb"
+    },
+    legend: {
+      dockInsidePlotArea: true,
+      fontColor: "#ffffff",
+      fontSize: 16,
+      horizontalAlign: "right",
+      verticalAlign: "top"
+    },
+    toolTip: {
+      backgroundColor: "#000000",
+      borderThickness: 2,
+      cornerRadius: 0,
+      fontColor: "#ffffff",
+      shared: true
+    },
+    data: [
+      {
+        color: "#00c700",
+        legendMarkerType: "square",
+        legendText: "Regular Trip",
+        name: "Regular Trip",
+        showInLegend: true,
+        type: "spline",
+        dataPoints: [
+          { x: date_month[0], y: 108599 },
+          { x: date_month[1], y: 133945 },
+          { x: date_month[2], y: 160774 },
+          { x: date_month[3], y: 110688 },
+          { x: date_month[4], y: 129228 },
+          { x: date_month[5], y: 158932 },
+          { x: date_month[6], y: 182252 },
+          { x: date_month[7], y: 145728 },
+          { x: date_month[8], y: 199271 },
+          { x: date_month[9], y: 187711 },
+          { x: date_month[10], y: 198552 },
+          { x: date_month[11], y: 206077 }
+        ]
+      },
+      {
+        color: "#c70000",
+        legendMarkerType: "square",
+        legendText: "Comeback",
+        name: "Comeback",
+        showInLegend: true,
+        type: "spline",
+        dataPoints: [
+          { x: date_month[0], y: 325799 },
+          { x: date_month[1], y: 401837 },
+          { x: date_month[2], y: 482323 },
+          { x: date_month[3], y: 332063 },
+          { x: date_month[4], y: 387684 },
+          { x: date_month[5], y: 476797 },
+          { x: date_month[6], y: 546756 },
+          { x: date_month[7], y: 437186 },
+          { x: date_month[8], y: 597813 },
+          { x: date_month[9], y: 563133 },
+          { x: date_month[10], y: 595657 },
+          { x: date_month[11], y: 618231 }
+        ]
+      }
+    ]
+  });
+
+  // CanvasJS bar chart to show country wise annual users percentage
+  var usersCountriesBarChart = new CanvasJS.Chart("users-countries-bar-chart", {
+    animationEnabled: true,
+    backgroundColor: "transparent",
+    axisX: {
+      labelFontColor: "#f7f6f6",
+      labelFontSize: 18,
+      lineThickness: 0,
+      tickThickness: 0
+    },
+    axisY: {
+      gridThickness: 0,
+      lineThickness: 0,
+      tickThickness: 0,
+      valueFormatString: " "
+
+    },
+    toolTip: {
+      backgroundColor: "#ffffff",
+      borderThickness: 0,
+      cornerRadius: 0,
+      fontColor: "#424242",
+      contentFormatter: function (e) {
+        return e.entries[0].dataPoint.label + ": " +  CanvasJS.formatNumber(Math.round(e.entries[0].dataPoint.y / 100 * 500), '###,###'); // calculating and showing country wise number of users inside tooltip
+      }
+    },
+    data: [
+      {
+        color: "#424242",
+        indexLabelFontColor: "#f7f6f6",
+        indexLabelFontFamily: "calibri",
+        indexLabelFontSize: 18,
+        indexLabelPlacement: "outside",
+        type: "bar",
+        dataPoints: [
+          { y: 2,  indexLabel: "2%",  label: "Others" },
+          { y: 4,  indexLabel: "4%",  label: "Glass-Component" },
+          { y: 5,  indexLabel: "5%",  label: "Packing System" },
+          { y: 12, indexLabel: "12%", label: "Lights" },
+          { y: 9,  indexLabel: "9%",  label: "Quick Svc" },
+          { y: 10, indexLabel: "10%", label: "Gauge Instr Pnl" },
+          { y: 14, indexLabel: "14%", label: "Tire Service" },
+          { y: 44, indexLabel: "44%", label: "Brake Maintenance System" }
+        ]
+      }
+    ]
+  });
+
+  // jQuery.scrollSpeed(100, 400); // for smooth mouse wheel scrolling
+
+  // jQuery.inview plugin
+  $('.inview').one('inview', function (e, isInView) {
+    if (isInView) {
+      switch (this.id) {
+        case "sales-doughnut-chart-us": salesDoughnutChartUS.render();
+          break;
+        case "sales-doughnut-chart-nl": salesDoughnutChartNL.render();
+          break;
+        case "sales-doughnut-chart-de": salesDoughnutChartDE.render();
+          break;
+        case "page-views-spline-area-chart": pageViewsSplineAreaChart.render();
+          break;
+        case "orders-spline-area-chart": ordersSplineAreaChart.render();
+          break;
+        case "revenue-spline-area-chart": revenueSplineAreaChart.render();
+          break;
+        case "users-doughnut-chart": usersDoughnutChart.render();
+          break;
+        case "users-spline-chart": usersSplineChart.render();
+          break;
+        case "users-countries-bar-chart": usersCountriesBarChart.render();
+          break;
+      }
+    }
+  });
+
 });
